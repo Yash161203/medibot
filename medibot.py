@@ -17,14 +17,17 @@ from langchain_huggingface import HuggingFaceEndpoint
 DB_FAISS_PATH="vectorstore/db_faiss"
 from langchain_huggingface import HuggingFaceEmbeddings
 
+from langchain_community.embeddings import HuggingFaceEmbeddings
+
 @st.cache_resource
 def get_vectorstore():
     embedding_model = HuggingFaceEmbeddings(
         model_name='sentence-transformers/all-MiniLM-L6-v2',
-        model_kwargs={"device": "cpu"}
+        model_kwargs={"device": "cpu"}  # This forces CPU-only mode
     )
     db = FAISS.load_local(DB_FAISS_PATH, embedding_model, allow_dangerous_deserialization=True)
     return db
+
 
 
 def set_custom_prompt(custom_prompt_template):
