@@ -2,7 +2,7 @@ import os
 import streamlit as st
 
 
-from langchain.embeddings import HuggingFaceEmbeddings
+from langchain_embeddings import HuggingFaceEmbeddings
 from langchain.chains import RetrievalQA
 
 from langchain_community.vectorstores import FAISS
@@ -15,14 +15,15 @@ from langchain_huggingface import HuggingFaceEndpoint
 
 
 DB_FAISS_PATH="vectorstore/db_faiss"
+from langchain_huggingface import HuggingFaceEmbeddings
+
 @st.cache_resource
 def get_vectorstore():
     embedding_model = HuggingFaceEmbeddings(
-    model_name='sentence-transformers/all-MiniLM-L6-v2',
-    model_kwargs={"device": "cpu"}  # Force CPU usage
-)
-
-    db=FAISS.load_local(DB_FAISS_PATH, embedding_model, allow_dangerous_deserialization=True)
+        model_name='sentence-transformers/all-MiniLM-L6-v2',
+        model_kwargs={"device": "cpu"}
+    )
+    db = FAISS.load_local(DB_FAISS_PATH, embedding_model, allow_dangerous_deserialization=True)
     return db
 
 
